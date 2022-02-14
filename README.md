@@ -10,7 +10,8 @@
     'match',
     'pattern' => '/^[А-Я]{1}[а-яё]{1,23}|[А-Я]{1}$/',
     'message' => 'Внесити в правиьном формате «Иванов И»',
-],```
+]
+```
 3. Применение when и whenClient в правилах для Yii2 
 ```
 [
@@ -24,5 +25,6 @@
      'whenClient' => "function (attribute, value) {
          return $('#detiankettable3544-field42').val() == '1';
       }",
-],```
+]
+```
  
