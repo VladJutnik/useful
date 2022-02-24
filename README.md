@@ -32,3 +32,24 @@
       }",
 ]
 ```
+5. Посмотреть запрос в форме sql для Yii2 (!! если запрос выдает результата сразу т.е. в конце стоит ->all() или ->one() то что бы сработал метод createCommand() ->all() или ->one()  нужно убрать!)
+```
+$rows = (new \yii\db\Query())
+    ->select(
+        [
+            'id',
+            'federal_district_id',
+            'region_id',
+            'municipality_id',
+            'title',
+             '(SELECT id from `director` where `director`.organization_id = `organization`.id) as result',
+        ])
+    ->from('organization')
+    ->where($where)
+     ->orderBy([
+         'federal_district_id' => SORT_ASC,
+         'region_id' => SORT_ASC,
+         'municipality_id' => SORT_ASC,
+     ])
+$rows->createCommand()->rawSQL //покажет sql запрос
+```
