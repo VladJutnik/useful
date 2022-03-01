@@ -53,3 +53,14 @@ $rows = (new \yii\db\Query())
      ])
 $rows->createCommand()->rawSQL //покажет sql запрос
 ```
+6. Посмотреть ошибки валидации для Yii2 
+```
+print_r('<pre>');
+    foreach ($model->getErrors() as $key => $value) {
+        print_r($key.': '.$value[0]);
+        print_r('<br>');
+    }
+print_r(Yii::$app->request->post());
+print_r('</pre>');
+exit();
+```
