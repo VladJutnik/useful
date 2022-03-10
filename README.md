@@ -68,12 +68,12 @@ exit();
 ```
 'user' => [
     'identityClass' => 'common\models\User',
-    'authTimeout' =>  60 * 60 * 24 * 10, // auth expire
+    'enableAutoLogin' => true,
+    'authTimeout' => 3600 * 15,
     'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
 ],
 'session' => [
     'name' => 'advanced-backend',
-    'timeout' => 3600*5, //session expire 5
-    //'timeout'=> 365*24*60*60,
+    'timeout' => 3600*15,
 ],
 ```
