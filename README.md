@@ -65,6 +65,7 @@ print_r('</pre>');
 exit();
 ```
 7. Время сессия для Yii2 (config/main.php)
+Настройка php файлов пример https://snipp.ru/php/life-session
 ```
 'user' => [
     'identityClass' => 'common\models\User',
