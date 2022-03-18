@@ -77,3 +77,16 @@ exit();
     'timeout' => 3600*15,
 ],
 ```
+8. Простой код для кнопки, на submit будет блокироваться, стили для bootstrap4
+```
+ $('form').on('beforeSubmit', function(){
+        var form = $(this);
+        var submit = form.find(':submit');
+        submit.html('' +
+            '<div class="spinner-border spinner-border-sm" role="status">'+
+            '<span class="visually-hidden"></span>'+
+            '</div> <strong> Пожалуйста, подождите...</strong>'
+        );
+        submit.prop('disabled', true);
+    });
+```
