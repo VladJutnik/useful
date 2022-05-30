@@ -234,3 +234,7 @@ let fff = [
             $('#result').html(content);
         }
 ```
+10. Перенос всего абзаца на следующию страницу если часть обзаца разорвалась в Mpdf 
+```
+<div style="margin-top: 8px; page-break-after: avoid; page-break-inside: avoid;"></div>
+```
