@@ -248,3 +248,174 @@ inner join organization on kids.organization_id = organization.id
 inner join type_lager on organization.type_lager_id = type_lager.id
 WHERE CONVERT(FROM_UNIXTIME(medicals.date), DATETIME) BETWEEN '2020-07-14' and '2020-07-15';
 ```
+12. Кастом правило в rules() для Yii2 
+```
+[
+    [
+        'field31_1_1',
+        'field31_1_2',
+        'field31_2_1',
+        'field31_2_2',
+        'field31_3_1',
+    ], function ($attribute, $params) {
+        $sum =
+            $this->field31_1_1 +
+            $this->field31_1_2 +
+            $this->field31_2_1 +
+            $this->field31_2_2 +
+            $this->field31_3_1;
+
+        if ($sum > 1) {
+            $this->addError($attribute, 'Проверьте правильность внесения, в столбце может быть только один ответ: "ДА" ');
+        }
+    }
+],
+```
+13. Кастом правило в rules() для Yii2 с выносом в отдельную функцию 
+```
+
+[
+    [
+        'field4_1',
+        'field4_2',
+        'field4_3',
+        'field4_21',
+        'field4_22',
+        'field4_23',
+    ],
+    'validateSum','message'=>'Проверьте правильность суммы'
+],
+
+public function validateSum($attribute)
+{
+    $rules_array_sum = [
+        'field4_1' => ['==', 'field4_5', 'field4_9', 'field4_13'],
+        'field4_2' => ['==', 'field4_6', 'field4_10', 'field4_14'],
+        'field4_3' => ['==', 'field4_7', 'field4_11', 'field4_15'],
+        'field4_21' => ['==', 'field4_1', 'field4_17'],
+        'field4_22' => ['==', 'field4_2', 'field4_18'],
+        'field4_23' => ['==', 'field4_3', 'field4_19'],
+        /*'field5' => ['<=', 'field4'],
+        'field5' => ['<=', 'field4'],*/
+    ];
+    //print_r(count($rules_array_sum[$attribute])); exit();
+    $sum = 0;
+    for ($i = 0, $count_info = count($rules_array_sum[$attribute]) - 1; $count_info > 0; $count_info--, $i++) {
+        $sum = $sum + $this[$rules_array_sum[$attribute][$i + 1]];
+    }
+    switch ($rules_array_sum[$attribute][0]) {
+        case '==':
+            if ((int)$this->$attribute !== (int)$sum) {
+                $this->addError(
+                    $attribute,
+                    'У Вас ошибка по '.$rules_array_sum[$attribute][0].' выделенных строк'
+                );
+                for (
+                    $j = 0, $count_info = count(
+                        $rules_array_sum[$attribute]
+                    ) - 1; $count_info > 0; $count_info--, $j++
+                ) {
+                    $this->addError(
+                        $rules_array_sum[$attribute][$j + 1],
+                        'Ошибка, проверьте правильность внесения: '.$this->getAttributeLabel(
+                            $rules_array_sum[$attribute][$j + 1]
+                        ).';'
+                    );
+                }
+            }
+            break;
+        case '<=':
+            if ((int)$this->$attribute > (int)$sum) {
+                $this->addError(
+                    $attribute,
+                    'У Вас ошибка по '.$rules_array_sum[$attribute][0].' выделенных строк'
+                );
+                for (
+                    $j = 0, $count_info = count(
+                        $rules_array_sum[$attribute]
+                    ) - 1; $count_info > 0; $count_info--, $j++
+                ) {
+                    $this->addError(
+                        $rules_array_sum[$attribute][$j + 1],
+                        'Ошибка, проверьте правильность внесения: '.$this->getAttributeLabel(
+                            $rules_array_sum[$attribute][$j + 1]
+                        ).';'
+                    );
+                }
+            }
+            break;
+        case '<':
+            if ((int)$this->$attribute >= (int)$sum) {
+                $this->addError(
+                    $attribute,
+                    'У Вас ошибка по '.$rules_array_sum[$attribute][0].' выделенных строк'
+                );
+                for (
+                    $j = 0, $count_info = count(
+                        $rules_array_sum[$attribute]
+                    ) - 1; $count_info > 0; $count_info--, $j++
+                ) {
+                    $this->addError(
+                        $rules_array_sum[$attribute][$j + 1],
+                        'Ошибка, проверьте правильность внесения: '.$this->getAttributeLabel(
+                            $rules_array_sum[$attribute][$j + 1]
+                        ).';'
+                    );
+                }
+            }
+            break;
+        case '>':
+            if ((int)$this->$attribute <= (int)$sum) {
+                $this->addError(
+                    $attribute,
+                    'У Вас ошибка по '.$rules_array_sum[$attribute][0].' выделенных строк;'
+                );
+                for (
+                    $j = 0, $count_info = count(
+                        $rules_array_sum[$attribute]
+                    ) - 1; $count_info > 0; $count_info--, $j++
+                ) {
+                    $this->addError(
+                        $rules_array_sum[$attribute][$j + 1],
+                        'Ошибка, проверьте правильность внесения: '.$this->getAttributeLabel(
+                            $rules_array_sum[$attribute][$j + 1]
+                        ).';'
+                    );
+                }
+            }
+            break;
+        case '>=':
+            if ((int)$this->$attribute < (int)$sum) {
+                $this->addError(
+                    $attribute,
+                    'У Вас ошибка по '.$rules_array_sum[$attribute][0].' выделенных строк;'
+                );
+                for (
+                    $j = 0, $count_info = count(
+                        $rules_array_sum[$attribute]
+                    ) - 1; $count_info > 0; $count_info--, $j++
+                ) {
+                    $this->addError(
+                        $rules_array_sum[$attribute][$j + 1],
+                        'Ошибка, проверьте правильность внесения: '.$this->getAttributeLabel(
+                            $rules_array_sum[$attribute][$j + 1]
+                        ).';'
+                    );
+                }
+            }
+            break;
+    }
+}
+```
+14. Применение & символа в фнукции 
+```
+public function actionRequestVisitorPrice() {
+    $error_message = '';
+    if($model->validate(Yii::$app->request->post()['MODELS']['name'], $error_message)){
+        .....
+    }
+}
+public static function validate($name, &$error_message = null, &$error_code = null) {
+    $error_message = 'текст ошибки который вернуть';
+}
+```
